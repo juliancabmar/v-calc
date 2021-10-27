@@ -23,9 +23,19 @@ function calculate(){
 
 
 function checkLast(str,arrayOfSymbols){
+  if (str.length > 0){
+    for (let i of arrayOfSymbols) {
+      if (str[str.length - 1] == i){
+        return true;
+      };
+    }
+  }
+  return false;
+}
 
-  for (let i of arrayOfSymbols) {
-    if (str[str.length - 1] == i){
+function check(str, comparissionArray){
+  for (let i of comparissionArray) {
+    if (str == i){
       return true;
     };
   }
@@ -36,58 +46,90 @@ function parNotClosed(str){
   return(((str.match(/\(/g) || []).length - (str.match(/\)/g) || []).length)>0)
 }
 
+function isPrevPoint (str) {
+  let strRev = str.split("").reverse().join("");
+  for (let i of strRev) {
+    if (check(i,['x','÷','+','-'])){
+      break;
+    }
+    else if (i == '.') {
+      return true;
+    }
+  }
+  return false;
+}
+
 
 function C(){
-  global.screen='';
+  global.screen ='';
   setScreen(global.screen);
 }
 
 function openParenthesis() {
   if (!checkLast(global.screen,['0','1','2','3','4','5','6','7','8','9',')','.'])){
-    global.screen+='(';
+    global.screen += '(';
     setScreen(global.screen);
   }
 }
 
 function closeParenthesis() {
   if (!checkLast(global.screen,['x','÷','+','-','(','.']) & (global.screen != '') & parNotClosed(global.screen)){
-    global.screen+=')';
+    global.screen += ')';
     setScreen(global.screen);
   } } function operators(oper) { if (!checkLast(global.screen,['x','÷','+','-','(','.']) & (global.screen != '')){
-    global.screen+=oper;
+    global.screen += oper;
     setScreen(global.screen);
   }
 }
 
 function numbers(num) {
-  if (!checkLast(global.screen,[')'])){
-    global.screen+=num;
-    setScreen(global.screen);
-  }
-}
+  let size = global.screen.length;
+  if (size > 0) {
+    
+    let last = global.screen[size -1];
+    
+    if (size == 1){
+      if (last != '0') {
+        global.screen += num;
+        setScreen(global.screen);
+      }
+    }
+    if (size > 1) {
+      let lasttwo = global.screen.slice(size - 2);
 
-function zero() {
-  console.log("ENTRO");
-    if (!checkLast(global.screen.slice[0,global.screen.length - 1],['x','÷','+','-','(']) & (global.screen[global.screen.length - 1] != '0')){
-      console.log(global.screen);
-      global.screen+='0';
+      if (!check(last,[')']) & !check(lasttwo,['+0','-0','÷0','x0'])){
+        global.screen+=num;
+        setScreen(global.screen);
+      }
+    }
+  }
+  else {
+    if (num != '00') {
+      global.screen += num;
       setScreen(global.screen);
     }
-}
-
-function doubleZero() {
-  if (!checkLast(global.screen,['0',')'])){
-    global.screen+='00';
-    setScreen(global.screen);
   }
 }
 
 function point() {
-  if (!checkLast(global.screen,['.',')'])){
-    global.screen+='.';
-    setScreen(global.screen);
+  let size = global.screen.length;
+  if (size > 0) {
+    let last = global.screen[size -1];
+    if (size == 1) {
+      if (!check(last,['+','-','÷','x','(',')','.'])) {
+        global.screen += '.';
+        setScreen(global.screen);
+      }
+    }
+    if (size > 1) {
+      if (!isPrevPoint(global.screen) & !check(last,['+','-','÷','x','(',')'])) {
+        global.screen += '.';
+        setScreen(global.screen);
+      }
+    }
   }
 }
+
   return (
     <View style={{flex: 1, justifyContent: 'flex-end', backgroundColor:'lightgrey'}}>
       <View style={{flex: 0.20, justifyContent: 'flex-end', backgroundColor: 'white'}}>
@@ -203,9 +245,9 @@ function point() {
           </TouchableOpacity>
         </View>
         <View style={{flex: 0.25, flexDirection: 'row', backgroundColor: 'black'}}>
-          <TouchableOpacity style={styles.botones_def} onPress={doubleZero}><Text style={styles.botones_num_Texts}>00</Text>
+          <TouchableOpacity style={styles.botones_def} onPress={()=>{numbers('00')}}><Text style={styles.botones_num_Texts}>00</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.botones_def} onPress={()=>{zero()}}><Text style={styles.botones_num_Texts}>0</Text>
+          <TouchableOpacity style={styles.botones_def} onPress={()=>{numbers('0')}}><Text style={styles.botones_num_Texts}>0</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.botones_def} onPress={point}><Text style={styles.botones_num_Texts}>.</Text>
           </TouchableOpacity>
