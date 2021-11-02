@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 
+
 global.screen = '';
 
 
@@ -21,6 +22,29 @@ function calculate(){
   p.then((value)=>setScreen(value));
 }
 
+function realEval(str) {
+  let maxDec = 0;
+
+  let text = "";
+
+
+	expre.replace(/[1-9]+\.?[0-9]+|[0-9]/g, (value) => {
+    let decAux = 0;
+
+    if (value.match(".")) {
+
+      decAux = 1;
+
+    }
+
+    if (maxDec < (value.length - decAux)) {
+    	maxDec = value.length - decAux;
+  	}
+	});
+
+  return eval(str).toFixed(maxDec);
+
+}
 
 function checkLast(str,arrayOfSymbols){
   if (str.length > 0){
@@ -76,9 +100,18 @@ function closeParenthesis() {
   if (!checkLast(global.screen,['x','÷','+','-','(','.']) & (global.screen != '') & parNotClosed(global.screen)){
     global.screen += ')';
     setScreen(global.screen);
-  } } function operators(oper) { if (!checkLast(global.screen,['x','÷','+','-','(','.']) & (global.screen != '')){
+  } 
+} 
+
+function operators(oper) { 
+  if (!checkLast(global.screen,['x','÷','+','-','(','.']) & (global.screen != '')){
     global.screen += oper;
     setScreen(global.screen);
+  }
+  else if (checkLast(global.screen,['x','÷','+','-'])) {
+    global.screen =  global.screen.slice(0, -1) + oper;
+    setScreen(global.screen);
+
   }
 }
 
