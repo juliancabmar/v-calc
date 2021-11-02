@@ -28,7 +28,7 @@ function realEval(str) {
   let text = "";
 
 
-	expre.replace(/[1-9]+\.?[0-9]+|[0-9]/g, (value) => {
+	str.replace(/[1-9]+\.?[0-9]+|[0-9]/g, (value) => {
     let decAux = 0;
 
     if (value.match(".")) {
