@@ -1,49 +1,78 @@
 import React, {useState} from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
-
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Text, View, TouchableOpacity, Image } from 'react-native';
 
 global.screen = '';
 
+const Stack = createNativeStackNavigator();
 
 export default function App() {
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Calculator">
+        <Stack.Screen name="V-Calc" component={Calculator} />
+        <Stack.Screen name="Vero + July" component={VeroyJuly} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+
+function VeroyJuly({navigation}) {
+  return (
+    <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', height: '100%', borderWidth: 1, backgroundColor: '#800040'}} >
+      <Image style={{flex: 4, width: '100%', height: '100%', alignSelf: 'center', resizeMode: 'contain', borderWidth: 1}}  source={require('./assets/photo.jpg')} />
+      <Text style={{flex: 1, color: 'red', fontSize: 40, textAlign: 'center', paddingTop: '10%', fontFamily: 'serif', fontStyle: 'italic'}}>Vero + July = ∞</Text>
+      <Text style={{flex: 1, color: 'cyan', fontSize: 25, textAlign: 'center', fontFamily: 'serif', fontStyle: 'italic'}}>09-11-2013</Text>
+    </View>
+  );
+}
+
+
+function Calculator({navigation}) {
   
   const [screen, setScreen] = useState('');
 
-function calculate(){
- let p = new Promise((res, rej)=>{
-   try {
-    global.screen = global.screen.replace(/x/g,'*');
-    global.screen = global.screen.replace(/÷/g,'/');
-    global.screen = eval(global.screen);
-    res(global.screen);
-   }
-   catch(err){};
- });
-  p.then((value)=>setScreen(value));
-}
-
-function realEval(str) {
-  let maxDec = 0;
-
-  let text = "";
-
-
-	str.replace(/[1-9]+\.?[0-9]+|[0-9]/g, (value) => {
-    let decAux = 0;
-
-    if (value.match(".")) {
-
-      decAux = 1;
+  function calculate(){
+    if (global.screen == "161180+131282") {
+      global.screen = "";
+      setScreen(global.screen);
+      navigation.navigate('Vero + July');
+    }
+    else {
+    let p = new Promise((res, rej) => {
+    try {
+      global.screen = global.screen.replace(/x/g,'*');
+      global.screen = global.screen.replace(/÷/g,'/');
+      global.screen = realEval(global.screen);
+      res(global.screen);
+    }
+    catch(err){};
+    });
+    p.then((value)=>setScreen(value));
 
     }
+}
 
-    if (maxDec < (value.length - decAux)) {
-    	maxDec = value.length - decAux;
-  	}
-	});
-
-  return eval(str).toFixed(maxDec);
-
+function realEval (str) {
+  let result = 0;
+  let auxStr = eval(str).toString();
+  
+	if (!auxStr.search(/[0-9]*\.[0-9]*0000[1-9]/g)) {
+  	result = Number(auxStr.slice(0,-1));
+	}
+  else if (!auxStr.search(/[0-9]*\.[0-9]*9999[1-9]/g)) {
+    auxStr = auxStr.replace(/9*[0-9]$/g, "");
+    auxStr = auxStr.slice(0, - 1) + (Number(auxStr.slice(-1)) + 1).toString()
+    result = Number(auxStr);
+  }
+  else {
+    result = Number(auxStr);
+  }
+  
+  return result.toString();
 }
 
 function checkLast(str,arrayOfSymbols){
@@ -318,4 +347,3 @@ let styles = {
     }
 
   }
-
