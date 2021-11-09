@@ -4,7 +4,7 @@
     "slug": "V_Calc",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon-calc.png",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -16,8 +16,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/icon-calc.png",
+        "backgroundColor": "#000000"
       },
       "package": "com.adjucama.V_Calc"
     },
@@ -27,3 +27,4 @@
     "description": "For Verito with Love"
   }
 }
+
