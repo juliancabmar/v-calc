@@ -1,4 +1,4 @@
 App.js
-./screens/main.js
-./screens/singlework.js
-./custom-items/checkbox.js
+./screens/calculator.js
+./screens/secrets.js
+./methods/methods.js
