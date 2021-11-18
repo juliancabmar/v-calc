@@ -1,20 +1,38 @@
+
+export function calculate() {
+  let res = '';
+  try {
+    res = global.screen.replace(/x/g,'*');
+    res = res.replace(/÷/g,'/');
+    return realEval(res);
+  }
+  catch (err){
+    return global.screen;
+  }
+}
+
+
+
 export function realEval (str) {
-  let result = 0;
-  let auxStr = eval(str).toString();
+  if (str.length > 0) {
+    let result = 0;
+    let auxStr = eval(str).toString();
   
-	if (!auxStr.search(/[0-9]*\.[0-9]*0000[1-9]/g)) {
-  	result = Number(auxStr.slice(0,-1));
-	}
-  else if (!auxStr.search(/[0-9]*\.[0-9]*9999[1-9]/g)) {
-    auxStr = auxStr.replace(/9*[0-9]$/g, "");
-    auxStr = auxStr.slice(0, - 1) + (Number(auxStr.slice(-1)) + 1).toString()
-    result = Number(auxStr);
-  }
-  else {
-    result = Number(auxStr);
-  }
+	  if (!auxStr.search(/[0-9]*\.[0-9]*0000[1-9]/g)) {
+  	  result = Number(auxStr.slice(0,-1));
+	  }
+    else if (!auxStr.search(/[0-9]*\.[0-9]*9999[1-9]/g)) {
+      auxStr = auxStr.replace(/9*[0-9]$/g, "");
+      auxStr = auxStr.slice(0, - 1) + (Number(auxStr.slice(-1)) + 1).toString()
+      result = Number(auxStr);
+    }
+    else {
+      result = Number(auxStr);
+    }
   
-  return result.toString();
+    return result.toString();
+    
+  }
 }
 
 function checkLast(str,arrayOfSymbols){
@@ -90,17 +108,26 @@ export function numbers(num) {
     if (size > 1) {
       let lasttwo = global.screen.slice(size - 2);
 
-      if (!check(last,[')']) & !check(lasttwo,['+0','-0','÷0','x0'])){
-        global.screen+=num;
+      if (!check(last,[')']) & !check(lasttwo,['+0','-0','÷0','x0','(0'])){
+        if (num == '00') { 
+          if (!check(last,['(','+','-','*','÷'])) {
+            global.screen+=num;
+          }
+        }
+        else {
+          global.screen+=num;
+        }
       }
     }
   }
+
   else {
     if (num != '00') {
       global.screen += num;
     }
   }
 }
+
 
 export function point() {
   let size = global.screen.length;

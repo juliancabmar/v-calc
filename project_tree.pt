@@ -1,4 +1,5 @@
 App.js
 ./screens/calculator.js
 ./screens/secrets.js
+./screens/test.js
 ./methods/methods.js

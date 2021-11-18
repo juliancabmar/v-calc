@@ -13,7 +13,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Calculator">
+      <Stack.Navigator initialRouteName="V-Calc">
         <Stack.Screen name="V-Calc" component={Calculator} />
         <Stack.Screen name="Vero + July" component={VeroyJuly} />
       </Stack.Navigator>
