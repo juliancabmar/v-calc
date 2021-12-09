@@ -68,8 +68,8 @@ export function Calculator({navigation}) {
 
     <View style={{flex: (0.22), justifyContent: 'flex-end', backgroundColor: 'white', display: displayC }}>
       <Text style={{fontSize: (() => {
-        if (screen.length > 14) {
-          return 45*(14 / screen.length);
+        if (screen.length > 28) {
+          return 45*(28 / screen.length);
         }
         else {
           return 45;
@@ -98,26 +98,39 @@ export function Calculator({navigation}) {
           <TouchableOpacity style={{
             flex: 0.25,
             borderWidth: 1,
-            backgroundColor: 'blue',
+            backgroundColor: '#800040',
             justifyContent: 'center',
-            borderRadius: 20}} onPress={() => {openParenthesis(); setScreen(global.screen)}}><Text style={{
+            borderRadius: 20}} onPress={() => {
+              if (!(/^-[0-9]$/).test(screen)) {
+                global.screen = global.screen.slice(0, -1);
+                setScreen(global.screen)
+              }
+            }
+            }><Text style={{
               justifyContent: 'center',
               textAlign: 'center',
               fontFamily: 'sans-serif',
-              fontSize: 35, color: 'magenta'
-              }}>(</Text>
+              fontSize: 45, color: 'white'
+              }}>←</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{
             flex: 0.25,
             borderWidth: 1,
             backgroundColor: 'blue',
             justifyContent: 'center',
-            borderRadius: 20}} onPress={() => {closeParenthesis(); setScreen(global.screen); setSubScreen(calculate)}}><Text style={{
+            borderRadius: 20}} onPress={() => {
+              if ((/[0-9]/).test(screen.slice(-1))) {
+                global.screen += '/100';
+                global.screen = calculate();
+                setScreen(calculate);
+                setSubScreen(calculate);
+              }
+            }}><Text style={{
               justifyContent: 'center',
               textAlign: 'center',
               fontFamily: 'sans-serif',
-              fontSize: 35, color: 'magenta'
-              }}>)</Text>
+              fontSize: 40, color: 'magenta'
+              }}>%</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{
             flex: 0.25,
@@ -201,20 +214,22 @@ export function Calculator({navigation}) {
             backgroundColor: 'green',
             justifyContent: 'center',
               borderRadius: 20}} onPress={() => {
-                if (global.screen == "161180+131282") {
-                  global.screen = "";
-                  setScreen(global.screen);
-                  navigation.navigate('Vero + July');
-                }
-                else {
-                  global.screen = calculate();
-                  if (screen != global.screen) {
-                    rend.push(Item(screen, global.screen));
-                    rend = rend.map((component)=> component);
-                    setItems(rend);
+                if (global.screen.length > 0) {
+                  if (global.screen == "161180+131282") {
+                    global.screen = "";
+                    setScreen(global.screen);
+                    navigation.navigate('Vero + July');
                   }
-                  setScreen(global.screen);
-                  setSubScreen('');
+                  else {
+                    global.screen = calculate();
+                    if (screen != global.screen) {
+                      rend.push(Item(screen, global.screen));
+                      rend = rend.map((component)=> component);
+                      setItems(rend);
+                    }
+                    setScreen(global.screen);
+                    setSubScreen('');
+                  }
                 }
               }}><Text style={{justifyContent: 'center',
               textAlign: 'center',
